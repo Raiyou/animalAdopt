@@ -647,7 +647,7 @@
                 $("#articleUserName").text(userArticleData.name);
                 $("#articlePostDate").text(articleData.postDate);
                 $("#articleModifiedDate").text(articleData.modifiedDate);
-                $("#conTent").html(articleData.content);
+                $("#conTent").html(articleData.content.replaceAll("\n", "<br>"));
 
                 // 新增留言區賦予 articleId
                 $("#addMsgArea").attr("articleId", articleData.articleId);
@@ -803,7 +803,7 @@
 
         var type = $("#postType").val();
         var title = $("#postTitle").val();
-        var content = $("#postContent").val().replaceAll("\n", "<br>");
+        var content = $("#postContent").val();
 
         if (content == "") {
             alert('請填寫文章內容')
@@ -831,6 +831,7 @@
                 alert("發文成功!");
                 // 發文成功後關閉彈出式互動視窗
                 $(".close[aria-label='postClose']").click();
+                $("#inputBox").val("");
                 changePage(1);
             }
         })

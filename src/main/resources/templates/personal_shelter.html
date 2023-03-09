@@ -87,8 +87,6 @@
             <div class="p-1">
                 <select class="custom-select" id="kind">
                     <option value="default">不限種類</option>
-                    <option value="狗">狗</option>
-                    <option value="貓">貓</option>
                 </select>
             </div>
             <div class="p-1">
@@ -309,8 +307,10 @@
         success: function (data) {
             // 使用 Set 排除重複迭代結果
             var areaSet = new Set();
+            var kindSet = new Set();
             $.each(data["results"], function (index, item) {
                 areaSet.add(item.area);
+                kindSet.add(item.animalKind);
             })
 
             // Set 類型不能使用 jQuery 的 each 方法 須使用原生 forEach
@@ -321,6 +321,12 @@
                     <option value="${area}">${area}</option>
                 `;
                 $("#area").append(comboBoxContent);
+            })
+            kindSet.forEach(function (kind) {
+                let kindComboBox = `
+                    <option value="${kind}">${kind}</option>
+                `;
+                $("#kind").append(kindComboBox);
             })
         }
     });
@@ -371,12 +377,14 @@
         console.log("跳過幾筆資料offset:" + data["offset"]);
         console.log("總筆數:" + data["total"]);
 
-        // 暫時停用捲動功能
-        // 查詢結束後捲動視窗至篩選欄
-        // $("html,body").animate({"scrollTop": $("#top").offset().top}, 300);
 
-        // 重新載入 Bootstrap 模板 js
-        $.getScript('js/main.js');
+        setTimeout(function () {
+            // 重新載入 Bootstrap 模板 js
+            $.getScript('js/main.js');
+            // 暫時停用捲動功能
+            // 查詢結束後捲動視窗至篩選欄
+            $("html,body").animate({"scrollTop": $("#top").offset().top}, 300);
+        },300);
     }
 
     function getAnimalInfo(gid) {//點擊詳細資料按紐

@@ -600,8 +600,11 @@
 <script src="js/_animal-init.js"></script>
 <script src="js/updatePublish.js"></script>
 <script src="js/delPublish.js"></script>
+<script src="js/pageController.js"></script>
 <script>
     // 載入頁面先執行一次
+    var pages;
+    var limit;
     getPersonal();
     getMissing();
 
@@ -637,12 +640,17 @@
                     $("#personalTableAjax").append(tableContent);
                 })
 
+                // 當次查詢總頁數
                 pages = Math.ceil(data.total / data.limit);
+                // 當次查詢每頁資料筆數
+                limit = data.limit;
+
                 if (data.total == 0) {
                     $("#personPageInfo").text("查無資料");
                 } else {
                     $("#personPageInfo").text("總頁數:" + pages + "  總筆數:" + data.total);
                 }
+                pageSet(pages);
             }
         })
     }
@@ -685,7 +693,7 @@
                 $("#animalVariety_personal").val(data.animalVariety);
                 $("#animalColor_personal").val(data.animalColor);
                 $("#animalBacterin_personal").val(data.animalBacterin);
-                $("#description_personal").html(data.description);
+                $("#description_personal").html(data.description.replaceAll("\n", "<br>"));
                 // 避免從快取獲得圖片 加入隨機網址參數
                 $("#imageUrl_personal").css("background-image", `url('${data.imageUrl}?random=${Date.now()}')`);
                 $("#userId_personal").text(data.userId);
@@ -713,7 +721,7 @@
         formData.append("animalBacterin", $("#animalBacterin_personal").val());
         formData.append("imageUrl", "");
         formData.append("area", $("#area_personal").val());
-        formData.append("description", $("#description_personal").html().replaceAll("<div>", "<br>").replaceAll("</div>", ""));
+        formData.append("description", $("#description_personal").html());
 
         $.ajax({
             type: "PUT",
@@ -774,12 +782,17 @@
                 `;
                     $("#missingTableAjax").append(tableContent);
                 })
+                // 當次查詢總頁數
                 pages = Math.ceil(data.total / data.limit);
+                // 當次查詢每頁資料筆數
+                limit = data.limit;
+
                 if (data.total == 0) {
                     $("#missingPageInfo").text("查無資料");
                 } else {
                     $("#missingPageInfo").text("總頁數:" + pages + "  總筆數:" + data.total);
                 }
+                pageSet(pages);
             }
         })
     }
@@ -818,7 +831,7 @@
                 $("#animalName_missing").text(data.name);
                 $("#animalVariety_missing").val(data.variety);
                 $("#animalColor_missing").val(data.color);
-                $("#description_missing").html(data.description);
+                $("#description_missing").html(data.description.replaceAll("\n", "<br>"));
                 // 避免從快取獲得圖片 加入隨機網址參數
                 $("#imageUrl_missing").css("background-image", `url('${data.imageUrl}?random=${Date.now()}')`);
                 $("#userId_missing").text(data.userId);
@@ -844,7 +857,7 @@
         formData.append("color", $("#animalColor_missing").val());
         formData.append("imageUrl", "");
         formData.append("area", $("#area_missing").val());
-        formData.append("description", $("#description_missing").html().replaceAll("<div>", "<br>").replaceAll("</div>", ""));
+        formData.append("description", $("#description_missing").html());
 
         $.ajax({
             type: "PUT",
@@ -876,6 +889,27 @@
         }
     }
 
+    // 換頁功能
+    function changePage(page) {
+        var queryParams = "";
+        var offset = limit * (page - 1);
+        // var area = $("#areaAjax").val();
+
+        queryParams += "&offset=" + offset;
+
+        // 取得篩選區的參數
+        // if (area != "default") {
+        //     queryParams += "&area=" + area;
+        // }
+
+        $.ajax({
+            type: "GET",
+            url: "/animalsMissing?" + queryParams,
+            success: function (data) {
+                getMissing();
+            }
+        })
+    }
 </script>
 
 </body>

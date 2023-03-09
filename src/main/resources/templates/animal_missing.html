@@ -365,12 +365,13 @@
         console.log("跳過幾筆資料offset:" + data["offset"]);
         console.log("總筆數:" + data["total"]);
 
-        // 暫時停用捲動功能
-        // 查詢結束後捲動視窗至篩選欄
-        // $("html,body").animate({"scrollTop": $("#top").offset().top}, 500);
-
-        // 重新載入 Bootstrap 模板 js
-        $.getScript('js/main.js');
+        setTimeout(function () {
+            // 重新載入 Bootstrap 模板 js
+            $.getScript('js/main.js');
+            // 暫時停用捲動功能
+            // 查詢結束後捲動視窗至篩選欄
+            $("html,body").animate({"scrollTop": $("#top").offset().top}, 300);
+        },300);
     }
 
     // 點擊詳細資料按鈕
