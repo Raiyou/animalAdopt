@@ -18,9 +18,10 @@ class AnimalApplicationTests {
         String url = encryptor.encrypt("jdbc:mysql://localhost:3306/animal?serverTimezone=Asia/Taipei&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull");
         String name = encryptor.encrypt("root");
         String password = encryptor.encrypt("root");
-        System.out.println("database url: " + url);
-        System.out.println("database name: " + name);
-        System.out.println("database password: " + password);
+        // 輸出加密結果
+        System.out.println("spring.datasource.url=ENC(" + url + ")");
+        System.out.println("spring.datasource.username=ENC(" + name + ")");
+        System.out.println("spring.datasource.password=ENC(" + password + ")");
         Assertions.assertTrue(url.length() > 0);
         Assertions.assertTrue(name.length() > 0);
         Assertions.assertTrue(password.length() > 0);
