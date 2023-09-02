@@ -14,6 +14,8 @@ public class ForumArticle {
     private String unlikes;
     private Date postDate;
     private Date modifiedDate;
+    private String author;
+    private Integer feedbacks;
 
     public Integer getArticleId() {
         return articleId;
@@ -93,5 +95,21 @@ public class ForumArticle {
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Integer getFeedbacks() {
+        return feedbacks;
+    }
+
+    public void setFeedbacks(Integer feedbacks) {
+        this.feedbacks = feedbacks;
     }
 }

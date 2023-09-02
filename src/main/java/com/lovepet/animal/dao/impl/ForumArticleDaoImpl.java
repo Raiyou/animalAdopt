@@ -41,7 +41,13 @@ public class ForumArticleDaoImpl implements ForumArticleDao {
 
     @Override
     public List<ForumArticle> getForumArticles(ForumArticleQueryParams forumArticleQueryParams) {
-        String sql = "SELECT * FROM article WHERE 1=1";
+        String sql = "SELECT * FROM (" +
+                "SELECT a.article_id, a.user_id, a.type, a.title, a.content, a.views, a.likes, a.unlikes, " +
+                "a.post_date, a.modified_date, u.name AS author, count(*) AS feedbacks FROM article AS a " +
+                "LEFT JOIN user AS u ON a.user_id = u.user_id " +
+                "LEFT JOIN feedback AS f ON a.article_id = f.article_id " +
+                "GROUP BY a.article_id) AS subquery " +
+                "WHERE 1=1";
 
         Map<String, Object> map = new HashMap<>();
 

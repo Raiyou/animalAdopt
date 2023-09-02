@@ -574,8 +574,8 @@
 
         $.each(data["results"], function (index, item) {
             // console.log(item.userId)
-            var userInfo = getUserInfo(item.userId);//傳入userid，取得使用者資訊
-            var messageData = getMessageInfo(item.articleId);//傳入文章id，取得留言資訊
+            // var userInfo = getUserInfo(item.userId);//傳入userid，取得使用者資訊
+            // var messageData = getMessageInfo(item.articleId);//傳入文章id，取得留言資訊
             // console.log(messageData);
             var html = `
                 <tr>
@@ -592,8 +592,8 @@
                             ${item.content.length > 10 ? item.content.replaceAll("<br>", " ").slice(0, 10) + "…" : item.content.replaceAll("<br>", " ")}
                         </div>
                     </td>
-                    <td><div>${userInfo.name}</div></td>
-                    <td><div>${messageData == null ? 0 : messageData[1]}</div></td>
+                    <td><div>${item.author}</div></td>
+                    <td><div>${item.feedbacks}</div></td>
 <!--                    <td><div>${item.likes}/${item.views}</div></td>-->
                     <td><div>${item.modifiedDate}</div></td>
                 </tr>

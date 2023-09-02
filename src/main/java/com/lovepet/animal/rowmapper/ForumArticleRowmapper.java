@@ -22,6 +22,8 @@ public class ForumArticleRowmapper implements RowMapper<ForumArticle> {
         forumArticle.setUnlikes(resultSet.getString("unlikes"));
         forumArticle.setPostDate(resultSet.getTimestamp("post_date"));
         forumArticle.setModifiedDate(resultSet.getTimestamp("modified_date"));
+        forumArticle.setAuthor(resultSet.getString("author"));
+        forumArticle.setFeedbacks(resultSet.getInt("feedbacks"));
 
         return forumArticle;
     }
