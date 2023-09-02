@@ -27,7 +27,7 @@ public class ForumArticleImpl implements ForumArticleService {
     }
 
     @Override
-    public ForumArticle getForumArticleById(Integer forumArticleId) {
+    public List<ForumArticle> getForumArticleById(Integer forumArticleId) {
         return forumArticleDao.getForumArticleById(forumArticleId);
     }
 

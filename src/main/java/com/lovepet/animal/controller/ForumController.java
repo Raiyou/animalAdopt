@@ -5,14 +5,12 @@ import com.lovepet.animal.dto.ForumArticleRequest;
 import com.lovepet.animal.model.ForumArticle;
 import com.lovepet.animal.service.ForumArticleService;
 import com.lovepet.animal.util.Page;
-import com.lovepet.animal.util.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -68,8 +66,8 @@ public class ForumController {
     }
 
     @GetMapping("/forumArticles/{forumArticleId}")//查詢指定文章id(單筆)
-    public ResponseEntity<ForumArticle> getForumArticle(@PathVariable Integer forumArticleId) {
-        ForumArticle forumArticle = forumArticleService.getForumArticleById(forumArticleId);
+    public ResponseEntity<List<ForumArticle>> getForumArticle(@PathVariable Integer forumArticleId) {
+        List<ForumArticle> forumArticle = forumArticleService.getForumArticleById(forumArticleId);
 
         if (forumArticle != null) {
             return ResponseEntity.status(HttpStatus.OK).body(forumArticle);
@@ -79,19 +77,19 @@ public class ForumController {
     }
 
     @PostMapping("/forumArticles")//發布文章
-    public ResponseEntity<ForumArticle> createPersonalAnimal(@RequestBody @Valid ForumArticleRequest forumArticleRequest) {
+    public ResponseEntity<List<ForumArticle>> createPersonalAnimal(@RequestBody @Valid ForumArticleRequest forumArticleRequest) {
         Integer forumArticleId = forumArticleService.createForumArticle(forumArticleRequest);
 
-        ForumArticle forumArticle = forumArticleService.getForumArticleById(forumArticleId);
+        List<ForumArticle> forumArticle = forumArticleService.getForumArticleById(forumArticleId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(forumArticle);
     }
 
     @PutMapping("/forumArticles/{forumArticleId}")//編輯文章
-    public ResponseEntity<ForumArticle> updateForumArticle(@PathVariable Integer forumArticleId,
+    public ResponseEntity<List<ForumArticle>> updateForumArticle(@PathVariable Integer forumArticleId,
                                                            @RequestBody @Valid ForumArticleRequest forumArticleRequest) {
         //檢查forumArticleId 是否存在
-        ForumArticle forumArticle = forumArticleService.getForumArticleById(forumArticleId);
+        List<ForumArticle> forumArticle = forumArticleService.getForumArticleById(forumArticleId);
 
         if (forumArticle == null) {//找不到回傳404 NOT_FOUND
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -100,7 +98,7 @@ public class ForumController {
         //修改文章內容
         forumArticleService.updateForumArticle(forumArticleId, forumArticleRequest);
 
-        ForumArticle updatedForumArticle = forumArticleService.getForumArticleById(forumArticleId);
+        List<ForumArticle> updatedForumArticle = forumArticleService.getForumArticleById(forumArticleId);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedForumArticle);
     }

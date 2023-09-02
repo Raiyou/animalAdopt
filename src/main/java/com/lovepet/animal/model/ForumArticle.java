@@ -16,6 +16,13 @@ public class ForumArticle {
     private Date modifiedDate;
     private String author;
     private Integer feedbacks;
+    private Integer messageId;
+    private Integer commenterId;
+    private String commenter;
+    private String comment;
+    private Date commentDate;
+    private Date commentEdited;
+    private Integer floor;
 
     public Integer getArticleId() {
         return articleId;
@@ -111,5 +118,61 @@ public class ForumArticle {
 
     public void setFeedbacks(Integer feedbacks) {
         this.feedbacks = feedbacks;
+    }
+
+    public Integer getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(Integer messageId) {
+        this.messageId = messageId;
+    }
+
+    public Integer getCommenterId() {
+        return commenterId;
+    }
+
+    public void setCommenterId(Integer commenterId) {
+        this.commenterId = commenterId;
+    }
+
+    public String getCommenter() {
+        return commenter;
+    }
+
+    public void setCommenter(String commenter) {
+        this.commenter = commenter;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Date getCommentDate() {
+        return commentDate;
+    }
+
+    public void setCommentDate(Date commentDate) {
+        this.commentDate = commentDate;
+    }
+
+    public Date getCommentEdited() {
+        return commentEdited;
+    }
+
+    public void setCommentEdited(Date commentEdited) {
+        this.commentEdited = commentEdited;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
     }
 }

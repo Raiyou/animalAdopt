@@ -12,7 +12,7 @@ public interface ForumArticleService {
 
     List<ForumArticle> getForumArticles(ForumArticleQueryParams forumArticleQueryParams);
 
-    ForumArticle getForumArticleById(Integer forumArticleId);
+    List<ForumArticle> getForumArticleById(Integer forumArticleId);
 
     Integer createForumArticle(ForumArticleRequest forumArticleRequest);
 

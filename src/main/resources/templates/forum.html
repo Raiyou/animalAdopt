@@ -620,6 +620,9 @@
     }
 
     function getArticleInfo(id) {//點擊文章
+        // 清空文章標題
+        $("#articleType").empty();
+        $("#articleTitle").empty();
         // 清空文章區內容
         $("#articleUserName").empty();
         $("#articlePostDate").empty();
@@ -639,26 +642,25 @@
         console.log("文章ID: " + id);
         $.ajax({//使用文章id，查詢文章資訊
             type: "GET",
-            // async: false,
             url: "/forumArticles/" + id,
             success: function (articleData) {
                 // 加入文章內文
-                $("#articleType").text(articleData.type);
-                $("#articleTitle").text(articleData.title);
-                $("#articleUserName").text(articleData.author);
-                $("#articlePostDate").text(articleData.postDate);
-                $("#articleModifiedDate").text(articleData.modifiedDate);
-                $("#conTent").html(articleData.content.replaceAll("\n", "<br>"));
+                $("#articleType").text(articleData[0].type);
+                $("#articleTitle").text(articleData[0].title);
+                $("#articleUserName").text(articleData[0].author);
+                $("#articlePostDate").text(articleData[0].postDate);
+                $("#articleModifiedDate").text(articleData[0].modifiedDate);
+                $("#conTent").html(articleData[0].content.replaceAll("\n", "<br>"));
 
                 // 新增留言區賦予 articleId
-                $("#addMsgArea").attr("articleId", articleData.articleId);
+                $("#addMsgArea").attr("articleId", articleData[0].articleId);
 
                 // 文章編輯區按鈕賦予 articleId
-                $("#editButton").attr("articleId", articleData.articleId);
-                $("#saveButton").attr("articleId", articleData.articleId);
-                $("#deleteButton").attr("articleId", articleData.articleId);
+                $("#editButton").attr("articleId", articleData[0].articleId);
+                $("#saveButton").attr("articleId", articleData[0].articleId);
+                $("#deleteButton").attr("articleId", articleData[0].articleId);
                 // 文章編輯區-發文者已登入則顯示按鈕
-                if (httpStatus == 200 && articleData.userId == user.id) {
+                if (httpStatus == 200 && articleData[0].userId == user.id) {
                     $("#loginButton").attr("style", "display: block;");
                     // 文章編輯區-按鈕及可編輯處初始化
                     $("#articleTypeEdit").attr("style", "display: none;");
@@ -673,34 +675,34 @@
                     $("#loginButton").attr("style", "display: none;");
                 }
 
-                // 傳入文章 id 取得留言資料
-                var messageData = getMessageInfo(articleData.articleId);
-                if (messageData != null) {
-                    $.each(messageData[0], function (index, item) {
-                        messageHtml = `
-                            <div class="m-1 p-3 col-12 div-style ftco-animate">
-                                <span id="messageContent${item.messageId}">${item.content}</span>
-                                <span id="messageId${item.messageId}" userId="${item.userId}" class="text-right text-light">
-                                 ${item.modifiedDate == item.postDate ? item.author + "&nbsp;留言於&nbsp;" + item.postDate : item.author + "&nbsp;編輯於&nbsp;" + item.modifiedDate}
-                                </span>
-                            </div>
-                        `;
+                $.each(articleData, function (index, item) {
+                    messageHtml = `
+                        <div class="m-1 p-3 col-12 div-style ftco-animate">
+                            <span id="messageContent${item.messageId}">${item.comment}</span>
+                            <span id="messageId${item.messageId}" userId="${item.commenterId}" class="text-right text-light">
+                             ${item.commentEdited == item.commentDate ? item.commenter + "&nbsp;留言於&nbsp;" + item.commentDate : item.commenter + "&nbsp;編輯於&nbsp;" + item.commentEdited}
+                            </span>
+                        </div>
+                    `;
+                    // 判斷此篇文章有無留言
+                    if (`${item.messageId}` != 0) {
+                        console.log(`${item.messageId}`)
                         $("#chatBlock").append(messageHtml);
+                    }
 
-                        // 判斷登入狀態 留言者已登入則顯示按紐 (編輯、保存、取消、刪除)
-                        var messageButton = `
-                        <a href="javascript:;" onclick="editMessageButton(this)" id="editMessageButton${item.messageId}" messageId="${item.messageId}">編輯</a>
-                        <a href="javascript:;" onclick="saveMessageButton(this)" id="saveMessageButton${item.messageId}" messageId="${item.messageId}" articleId="${item.articleId}" style="display: none;">保存</a>
-                        <a href="javascript:;" onclick="cancelMessageButton(this)" id="cancelMessageButton${item.messageId}" messageId="${item.messageId}" style="display: none;">取消</a>
-                        <a href="javascript:;" onclick="deleteMessageButton(this)" id="deleteMessageButton${item.messageId}" messageId="${item.messageId}" articleId="${item.articleId}">刪除</a>
-                        `;
-                        var userId = $("#messageId" + item.messageId).attr("userId");
-                        if (httpStatus == 200 && userId == user.id) {
-                            console.log(userId);
-                            $("#messageId" + item.messageId).append(messageButton);
-                        }
-                    });
-                }
+                    // 判斷登入狀態 留言者已登入則顯示按紐 (編輯、保存、取消、刪除)
+                    var messageButton = `
+                    <a href="javascript:;" onclick="editMessageButton(this)" id="editMessageButton${item.messageId}" messageId="${item.messageId}">編輯</a>
+                    <a href="javascript:;" onclick="saveMessageButton(this)" id="saveMessageButton${item.messageId}" messageId="${item.messageId}" articleId="${item.articleId}" style="display: none;">保存</a>
+                    <a href="javascript:;" onclick="cancelMessageButton(this)" id="cancelMessageButton${item.messageId}" messageId="${item.messageId}" style="display: none;">取消</a>
+                    <a href="javascript:;" onclick="deleteMessageButton(this)" id="deleteMessageButton${item.messageId}" messageId="${item.messageId}" articleId="${item.articleId}">刪除</a>
+                    `;
+                    var userId = $("#messageId" + item.messageId).attr("userId");
+                    if (httpStatus == 200 && userId == user.id) {
+                        console.log(userId);
+                        $("#messageId" + item.messageId).append(messageButton);
+                    }
+                });
                 // 置於 ajax 最末段執行 以動畫淡入效果刷新留言
                 $.getScript('js/main.js');
             }

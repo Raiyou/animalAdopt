@@ -42,8 +42,7 @@ public class ForumArticleDaoImpl implements ForumArticleDao {
     @Override
     public List<ForumArticle> getForumArticles(ForumArticleQueryParams forumArticleQueryParams) {
         String sql = "SELECT * FROM (" +
-                "SELECT a.article_id, a.user_id, a.type, a.title, a.content, a.views, a.likes, a.unlikes, " +
-                "a.post_date, a.modified_date, u.name AS author, count(*) AS feedbacks FROM article AS a " +
+                "SELECT a.*, u.name AS author, count(*) AS feedbacks FROM article AS a " +
                 "LEFT JOIN user AS u ON a.user_id = u.user_id " +
                 "LEFT JOIN feedback AS f ON a.article_id = f.article_id " +
                 "GROUP BY a.article_id) AS subquery " +
@@ -68,15 +67,15 @@ public class ForumArticleDaoImpl implements ForumArticleDao {
     }
 
     @Override
-    public ForumArticle getForumArticleById(Integer forumArticleId) {
-//        String sql = "SELECT * FROM article WHERE article_id = :articleId";
-        String sql = "SELECT * FROM (" +
-                "SELECT a.article_id, a.user_id, a.type, a.title, a.content, a.views, a.likes, a.unlikes, " +
-                "a.post_date, a.modified_date, u.name AS author, count(*) AS feedbacks FROM article AS a " +
-                "LEFT JOIN user AS u ON a.user_id = u.user_id " +
-                "LEFT JOIN feedback AS f ON a.article_id = f.article_id " +
-                "GROUP BY a.article_id) AS subquery " +
-                "WHERE article_id = :articleId";
+    public List<ForumArticle> getForumArticleById(Integer forumArticleId) {
+        String sql = "SELECT subquery.*, f.message_id, f.user_id AS commenter_id, u.name AS commenter, f.content AS comment, " +
+                "f.post_date AS comment_date, f.modified_date AS comment_edited, f.floor FROM (" +
+                "SELECT a.*, u.name AS author FROM article AS a " +
+                "LEFT JOIN user AS u ON a.user_id = u.user_id" +
+                ") AS subquery " +
+                "LEFT JOIN feedback AS f ON subquery.article_id = f.article_id " +
+                "LEFT JOIN user AS u ON f.user_id = u.user_id " +
+                "WHERE subquery.article_id = :articleId";
 
         Map<String, Object> map = new HashMap<>();
         map.put("articleId", forumArticleId);
@@ -84,7 +83,7 @@ public class ForumArticleDaoImpl implements ForumArticleDao {
         List<ForumArticle> forumArticleList = namedParameterJdbcTemplate.query(sql, map, new ForumArticleRowmapper());
 
         if (forumArticleList.size() > 0) {
-            return forumArticleList.get(0);
+            return forumArticleList;
         } else {
             return null;
         }
@@ -180,10 +179,10 @@ public class ForumArticleDaoImpl implements ForumArticleDao {
         System.out.println(forumArticle.getLikes());
         System.out.println(forumArticle.getViews());
 
-        int likes = getForumArticleById(id).getLikes();
+        int likes = getForumArticleById(id).get(0).getLikes();
         System.out.println(likes);
 
-        int views = getForumArticleById(id).getViews();
+        int views = getForumArticleById(id).get(0).getViews();
         System.out.println(views);
 
 
