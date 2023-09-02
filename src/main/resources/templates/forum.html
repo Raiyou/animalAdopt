@@ -305,7 +305,7 @@
                     <!-- Modal 文章資訊-->
                     <div class="modal-header">
                         <div class="col-12 px-0 d-flex justify-content-center">
-                            <div class="modal-title d-flex">
+                            <div class="modal-title d-flex ftco-animate">
                                 <!-- 瀏覽文章分類區塊 (編輯時) -->
                                 <select id="articleTypeEdit" class="custom-select text-center"
                                         style="display: none;">
@@ -332,7 +332,7 @@
                     <div class="modal-body" style="border-top: 3px dotted grey;">
                         <div class="row mx-auto mb-3 p-3 col-lg-10 col-12 justify-content-center div-style">
                             <!-- 瀏覽文章內文區塊 -->
-                            <div class="row m-0 px-3 col-12" style="border-bottom: 1px solid lightgrey;">
+                            <div class="row m-0 px-3 col-12 ftco-animate" style="border-bottom: 1px solid lightgrey;">
                                 <div class="row col-6 mx-0 mb-2 p-0 font-weight-bold justify-content-start">
                                     <!-- 使用者名稱 -->
                                     <span id="articleUserName">使用者名稱</span>
@@ -349,7 +349,7 @@
                                 </div>
                             </div>
                             <!-- 瀏覽文章按鈕區塊 -->
-                            <div class="m-0 p-0 col-12">
+                            <div class="m-0 p-0 col-12 ftco-animate">
                                 <span id="conTent" class="col-12" contenteditable="false">文章內文</span>
                                 <span id="loginButton" class="mt-1 text-right" style="display: none;">
                                     <!-- 自訂屬性 articleId -->
@@ -626,97 +626,6 @@
             type: "GET",
             url: "/forumArticles/" + id,
             success: function (articleData) {
-                $("#articleInfo > .modal-header").empty();
-                $("#articleInfo > .modal-body").empty();
-
-                articleHeaderHtml = `
-                <div class="col-12 px-0 d-flex justify-content-center ftco-animate">
-                    <div class="modal-title d-flex">
-                        <!-- 瀏覽文章分類區塊 (編輯時) -->
-                        <select id="articleTypeEdit" class="custom-select text-center"
-                                style="display: none;">
-                            <option value="綜合">綜合</option>
-                            <option value="問題">問題</option>
-                            <option value="心得">心得</option>
-                            <option value="開箱">開箱</option>
-                            <option value="新聞">新聞</option>
-                            <option value="知識">知識</option>
-                            <option value="閒聊">閒聊</option>
-                            <option value="創作">創作</option>
-                        </select>
-                        <h5 id="articleType" class="my-0 font-weight-bold text-center">分類</h5>
-                        <h3 id="articleTitle" class="my-0 mx-2 font-weight-bold text-center">文章標題</h3>
-                    </div>
-
-                    <button type="button" class="close" data-dismiss="modal" aria-label="browseClose"
-                            style="position: absolute !important; top: 0; right: 0; padding: 10px !important;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                `;
-
-                articleBodyHtml = `
-                <div class="row mx-auto mb-3 p-3 col-lg-10 col-12 justify-content-center div-style ftco-animate">
-                    <!-- 瀏覽文章內文區塊 -->
-                    <div class="row m-0 px-3 col-12" style="border-bottom: 1px solid lightgrey;">
-                        <div class="row col-6 mx-0 mb-2 p-0 font-weight-bold justify-content-start">
-                            <!-- 使用者名稱 -->
-                            <span id="articleUserName">使用者名稱</span>
-                        </div>
-                        <div class="row col-6 m-0 p-0">
-                            <div class="row col-12 m-0 p-0 justify-content-end">
-                                <span class="text-light">發文時間&nbsp;</span>
-                                <span class="text-light" id="articlePostDate"></span>
-                            </div>
-                            <div class="row col-12 m-0 p-0 justify-content-end">
-                                <span class="text-light">更新時間&nbsp;</span>
-                                <span class="text-light" id="articleModifiedDate"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 瀏覽文章按鈕區塊 -->
-                    <div class="m-0 p-0 col-12">
-                        <span id="conTent" class="col-12" contenteditable="false">文章內文</span>
-                        <span id="loginButton" class="mt-1 text-right" style="display: none;">
-                            <!-- 自訂屬性 articleId -->
-                            <button id="editButton" articleId=""
-                                    class="btn btn-primary ftco-animate">編輯</button>
-                            <button id="saveButton" articleId="" class="btn btn-primary ftco-animate"
-                                    style="display: none;">
-                                保存
-                            </button>
-                            <button id="cancelButton" class="btn btn-primary btn-cancel ftco-animate"
-                                    style="display: none;">取消
-                            </button>
-                            <button id="deleteButton" articleId=""
-                                    class="btn btn-primary btn-del ftco-animate">刪除</button>
-                        </span>
-                    </div>
-                </div>
-                <!-- 新增留言區塊 -->
-                <div class="row mx-auto mb-3 col-lg-10 col-12 justify-content-center ftco-animate">
-                    <!-- 自訂屬性 articleId -->
-                    <textarea id="addMsgArea" articleId="" class="m-1 col-12 div-style ftco-animate"
-                              oninput="setTextAreaHeight(this);" style="display: none;"></textarea>
-                    <span class="mt-1 text-right" style="display: block;">
-                        <button id="newMsgBtn" class="btn btn-primary mx-1 ftco-animate" onclick="newMsg()">我要留言
-                        </button>
-                        <button id="saveMsgBtn" class="btn btn-primary ftco-animate" onclick="saveMsg()"
-                                style="display: none;">保存
-                        </button>
-                        <button id="cancelMsgBtn" class="btn btn-primary btn-cancel ftco-animate" onclick="cancelMsg()"
-                                style="display: none;">取消
-                    </button>
-                    </span>
-                </div>
-                <div id="chatBlock" class="row m-auto col-lg-10 col-12 justify-content-center">
-                    <!-- 文章留言區塊 -->
-                </div>
-                `;
-
-                $("#articleInfo > .modal-header").append(articleHeaderHtml);
-                $("#articleInfo > .modal-body").append(articleBodyHtml);
-
                 // 清空文章標題
                 $("#articleType").empty();
                 $("#articleTitle").empty();
