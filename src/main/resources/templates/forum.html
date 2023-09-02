@@ -527,7 +527,7 @@
 
 
     // 傳入 id 並回傳 userData 使用者資訊
-    // 其為多個 ajax 的依賴 此處須設定非同步執行
+    // 其為多個 ajax 的依賴 此處須設定同步執行
     function getUserInfo(id) {
         var rsData;
         $.ajax({//使用userId，查詢user資訊
@@ -541,11 +541,11 @@
         return rsData;
     }
 
-    //傳入文章 id 並回傳 messageData 留言
-    // 其為多個 ajax 的依賴 此處須設定非同步執行
+    // 傳入文章 id 並回傳 messageData 留言
+    // 其為多個 ajax 的依賴 此處須設定同步執行
     function getMessageInfo(id) {
         var rsData;
-        $.ajax({//使用userId，查詢user資訊
+        $.ajax({
             type: "GET",
             url: "/message?articleId=" + id,
             async: false,
@@ -573,10 +573,6 @@
         $("#tableAjax").append(title);//加入標題
 
         $.each(data["results"], function (index, item) {
-            // console.log(item.userId)
-            // var userInfo = getUserInfo(item.userId);//傳入userid，取得使用者資訊
-            // var messageData = getMessageInfo(item.articleId);//傳入文章id，取得留言資訊
-            // console.log(messageData);
             var html = `
                 <tr>
                     <td>
@@ -624,6 +620,14 @@
     }
 
     function getArticleInfo(id) {//點擊文章
+        // 清空文章區內容
+        $("#articleUserName").empty();
+        $("#articlePostDate").empty();
+        $("#articleModifiedDate").empty();
+        $("#chatBlock").empty();
+        // 清空留言區內容
+        $("#conTent").empty();
+
         // 新增留言區-按鈕及可編輯處初始化
         $("#addMsgArea").val("");
         $("#addMsgArea").attr("style", "display: none;");
@@ -638,13 +642,10 @@
             // async: false,
             url: "/forumArticles/" + id,
             success: function (articleData) {
-                // 傳入userId，取得使用者資訊
-                var userArticleData = getUserInfo(articleData.userId);
-
                 // 加入文章內文
                 $("#articleType").text(articleData.type);
                 $("#articleTitle").text(articleData.title);
-                $("#articleUserName").text(userArticleData.name);
+                $("#articleUserName").text(articleData.author);
                 $("#articlePostDate").text(articleData.postDate);
                 $("#articleModifiedDate").text(articleData.modifiedDate);
                 $("#conTent").html(articleData.content.replaceAll("\n", "<br>"));
@@ -672,19 +673,15 @@
                     $("#loginButton").attr("style", "display: none;");
                 }
 
-                // 清空留言區內容
-                $("#chatBlock").empty();
                 // 傳入文章 id 取得留言資料
                 var messageData = getMessageInfo(articleData.articleId);
                 if (messageData != null) {
                     $.each(messageData[0], function (index, item) {
-                        // 傳入 userId 取得 user 資料
-                        var userData = getUserInfo(item.userId);
                         messageHtml = `
                             <div class="m-1 p-3 col-12 div-style ftco-animate">
                                 <span id="messageContent${item.messageId}">${item.content}</span>
                                 <span id="messageId${item.messageId}" userId="${item.userId}" class="text-right text-light">
-                                 ${item.modifiedDate == item.postDate ? userData.name + "&nbsp;留言於&nbsp;" + item.postDate : userData.name + "&nbsp;編輯於&nbsp;" + item.modifiedDate}
+                                 ${item.modifiedDate == item.postDate ? item.author + "&nbsp;留言於&nbsp;" + item.postDate : item.author + "&nbsp;編輯於&nbsp;" + item.modifiedDate}
                                 </span>
                             </div>
                         `;

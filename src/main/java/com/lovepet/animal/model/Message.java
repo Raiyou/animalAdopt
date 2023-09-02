@@ -12,6 +12,7 @@ public class Message {
     private Date modifiedDate;
     private Integer messageId;
     private Integer floor;
+    private String author;
 
     public Integer getArticleId() {
         return articleId;
@@ -83,5 +84,13 @@ public class Message {
 
     public void setFloor(Integer floor) {
         this.floor = floor;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

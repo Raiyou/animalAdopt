@@ -34,7 +34,11 @@ public class MessageDaoImpl implements MessageDao {
 
     @Override
     public List<Message> getMessage(MessageQueryParams messageQueryParams) {
-        String sql = "SELECT * FROM feedback WHERE 1=1";
+        String sql = "SELECT * FROM (" +
+                "SELECT f.message_id, f.article_id, f.user_id, f.content, f.likes, f.unlikes, " +
+                "f.post_date, f.modified_date, f.floor, u.name AS author FROM feedback AS f " +
+                "LEFT JOIN user AS u ON f.user_id = u.user_id) AS subquery " +
+                "WHERE 1=1";
 
         Map<String, Object> map = new HashMap<>();
 
@@ -48,6 +52,25 @@ public class MessageDaoImpl implements MessageDao {
         return messages;
     }
 
+    @Override
+    public Message getMessageById(Integer messageId) {
+        String sql = "SELECT * FROM (" +
+                "SELECT f.message_id, f.article_id, f.user_id, f.content, f.likes, f.unlikes, " +
+                "f.post_date, f.modified_date, f.floor, u.name AS author FROM feedback AS f " +
+                "LEFT JOIN user AS u ON f.user_id = u.user_id) AS subquery " +
+                "WHERE message_id = :messageId";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("messageId", messageId);
+
+        List<Message> messageList = namedParameterJdbcTemplate.query(sql, map, new MessageRowmapper());
+
+        if (messageList.size() > 0) {
+            return messageList.get(0);
+        }else {
+            return null;
+        }
+    }
 
     @Override
     public void createMessage(MessageQueryParams messageQueryParams) {
@@ -60,22 +83,6 @@ public class MessageDaoImpl implements MessageDao {
         map.put("modifiedDate", new Date());
 
         namedParameterJdbcTemplate.update(sql, map);
-    }
-
-    @Override
-    public Message getMessageById(Integer messageId) {
-        String sql = "SELECT * FROM feedback WHERE message_id = :messageId";
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("messageId", messageId);
-
-        List<Message> messageList = namedParameterJdbcTemplate.query(sql, map, new MessageRowmapper());
-
-        if (messageList.size() > 0) {
-            return messageList.get(0);
-        }else {
-            return null;
-        }
     }
 
     @Override

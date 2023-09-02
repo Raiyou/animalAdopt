@@ -20,6 +20,7 @@ public class MessageRowmapper implements RowMapper<Message> {
         message.setModifiedDate(resultSet.getTimestamp("modified_date"));
         message.setMessageId(resultSet.getInt("message_id"));
         message.setFloor(resultSet.getInt("floor"));
+        message.setAuthor(resultSet.getString("author"));
 
         return message;
     }
