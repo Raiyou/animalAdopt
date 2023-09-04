@@ -42,7 +42,7 @@ public class ForumArticleDaoImpl implements ForumArticleDao {
     @Override
     public List<ForumArticle> getForumArticles(ForumArticleQueryParams forumArticleQueryParams) {
         String sql = "SELECT * FROM (" +
-                "SELECT a.*, u.name AS author, count(*) AS feedbacks FROM article AS a " +
+                "SELECT a.*, u.name AS author, count(*) AS feedbacks, f.article_id AS message_id FROM article AS a " +
                 "LEFT JOIN user AS u ON a.user_id = u.user_id " +
                 "LEFT JOIN feedback AS f ON a.article_id = f.article_id " +
                 "GROUP BY a.article_id) AS subquery " +
@@ -62,6 +62,13 @@ public class ForumArticleDaoImpl implements ForumArticleDao {
         map.put("offset", forumArticleQueryParams.getOffset());
 
         List<ForumArticle> forumArticleList = namedParameterJdbcTemplate.query(sql, map, new ForumArticleRowmapper());
+
+        // JOIN 結果若 feedback 表的 article_id 為空值則留言數設為 0
+        for (ForumArticle article : forumArticleList) {
+            if (article.getMessageId() == 0) {
+                article.setFeedbacks(0);
+            }
+        }
 
         return forumArticleList;
     }
