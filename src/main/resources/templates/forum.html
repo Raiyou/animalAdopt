@@ -300,10 +300,10 @@
         <!-- Modal 瀏覽文章-->
         <div class="modal fade" id="browseModalCenter" tabindex="-1" role="dialog"
              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
                 <div id="articleInfo" class="modal-content modal-bg">
                     <!-- Modal 文章資訊-->
-                    <div class="modal-header ftco-animate" style="display: none">
+                    <div class="modal-header ftco-animate">
                         <div class="col-12 px-0 d-flex justify-content-center">
                             <div class="modal-title d-flex ftco-animate">
                                 <!-- 瀏覽文章分類區塊 (編輯時) -->
@@ -327,8 +327,8 @@
                             </button>
                         </div>
                     </div>
-                    <div class="modal-body ftco-animate">
-                        <div class="row mx-auto mb-3 p-3 col-lg-10 col-12 justify-content-center div-style" style="display: none">
+                    <div class="modal-body" style="border-top: 3px dotted grey;">
+                        <div class="row mx-auto mb-3 p-3 col-lg-10 col-12 justify-content-center div-style">
                             <!-- 瀏覽文章內文區塊 -->
                             <div class="row m-0 px-3 col-12 ftco-animate" style="border-bottom: 1px solid lightgrey;">
                                 <div class="row col-6 mx-0 mb-2 p-0 font-weight-bold justify-content-start">
@@ -363,7 +363,7 @@
                             </div>
                         </div>
                         <!-- 新增留言區塊 -->
-                        <div class="row mx-auto mb-3 col-lg-10 col-12 justify-content-center ftco-animate" style="display: none">
+                        <div class="row mx-auto mb-3 col-lg-10 col-12 justify-content-center ftco-animate">
                             <!-- 自訂屬性 articleId -->
                             <textarea id="addMsgArea" articleId="" class="m-1 col-12 div-style"
                                       oninput="setTextAreaHeight(this);" style="display: none;"></textarea>
@@ -1061,11 +1061,24 @@
         textarea.style.height = (textarea.scrollHeight) + "px";
     }
 
-    // 彈出式互動視窗關閉時將元素隱蔽避免資料暫留
-    $("#browseModalCenter").on("hidden.bs.modal", function() {
+    // 定時器
+    var timer;
+    // 彈出式互動視窗開啟時與內部元素互動
+    $("#browseModalCenter").on("show.bs.modal", function() {
+        // 將元素隱蔽避免資料暫留
         $("#articleInfo > .modal-header").attr("style", "display: none");
         $("#articleInfo > .modal-body > div").attr("style", "display: none");
-    });
+        // 定時將資料淡入
+        timer = setInterval(function() {
+            $.getScript('js/main.js');
+        }, 1000);
+    })
+    // 彈出式互動視窗關閉時與內部元素互動
+    $("#browseModalCenter").on("hide.bs.modal", function() {
+        // 中止定時器
+      clearInterval(timer);
+    })
+
 </script>
 
 </body>
