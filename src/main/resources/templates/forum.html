@@ -376,7 +376,7 @@
                                 </button>
                             </span>
                         </div>
-                        <div id="chatBlock" class="row m-auto col-lg-10 col-12 justify-content-center">
+                        <div id="chatBlock" class="row m-auto col-lg-10 col-12 justify-content-center ftco-animate">
                             <!-- 文章留言區塊 -->
                         </div>
                     </div>
@@ -671,7 +671,7 @@
 
                 $.each(articleData, function (index, item) {
                     messageHtml = `
-                        <div class="m-1 p-3 col-12 div-style ftco-animate">
+                        <div class="m-1 p-3 col-12 div-style">
                             <span id="messageContent${item.messageId}">${item.comment}</span>
                             <span id="messageId${item.messageId}" userId="${item.commenterId}" class="text-right text-light">
                              ${item.commentEdited == item.commentDate ? item.commenter + "&nbsp;留言於&nbsp;" + item.commentDate : item.commenter + "&nbsp;編輯於&nbsp;" + item.commentEdited}
@@ -1061,51 +1061,11 @@
         textarea.style.height = (textarea.scrollHeight) + "px";
     }
 
-    // 定時器
-    var timer;
     // 彈出式互動視窗開啟時與內部元素互動
     $("#browseModalCenter").on("show.bs.modal", function() {
         // 將元素隱蔽避免資料暫留
         $("#articleInfo > .modal-header").attr("style", "display: none");
         $("#articleInfo > .modal-body > div").attr("style", "display: none");
-        // 定時將留言資料淡入
-        timer = setInterval(function() {
-            var contentWayPoint = function() {
-                var i = 0;
-                $('.ftco-animate').waypoint( function( direction ) {
-                    if( direction === 'down' && !$(this.element).hasClass('ftco-animated') ) {
-                        i++;
-                        $(this.element).addClass('item-animate');
-                        setTimeout(function(){
-
-                            $('body .ftco-animate.item-animate').each(function(k){
-                                var el = $(this);
-                                setTimeout( function () {
-                                    var effect = el.data('animate-effect');
-                                    if ( effect === 'fadeIn') {
-                                        el.addClass('fadeIn ftco-animated');
-                                    } else if ( effect === 'fadeInLeft') {
-                                        el.addClass('fadeInLeft ftco-animated');
-                                    } else if ( effect === 'fadeInRight') {
-                                        el.addClass('fadeInRight ftco-animated');
-                                    } else {
-                                        el.addClass('fadeInUp ftco-animated');
-                                    }
-                                    el.removeClass('item-animate');
-                                },  k * 50, 'easeInOutExpo' );
-                            });
-                        }, 100);
-                    }
-                } , { offset: '95%' } );
-            };
-            contentWayPoint();
-        }, 1000);
-    })
-
-    // 彈出式互動視窗關閉時與內部元素互動
-    $("#browseModalCenter").on("hide.bs.modal", function() {
-        // 中止定時器
-        clearInterval(timer);
     })
 
 </script>
