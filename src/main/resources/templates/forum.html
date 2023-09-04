@@ -303,7 +303,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div id="articleInfo" class="modal-content modal-bg">
                     <!-- Modal 文章資訊-->
-                    <div class="modal-header">
+                    <div class="modal-header ftco-animate" style="display: none">
                         <div class="col-12 px-0 d-flex justify-content-center">
                             <div class="modal-title d-flex ftco-animate">
                                 <!-- 瀏覽文章分類區塊 (編輯時) -->
@@ -318,19 +318,17 @@
                                     <option value="閒聊">閒聊</option>
                                     <option value="創作">創作</option>
                                 </select>
-                                <h5 id="articleType" class="my-0 font-weight-bold text-center">
-                                    文章分類</h5>
+                                <h5 id="articleType" class="my-0 font-weight-bold text-center">分類</h5>
                                 <h3 id="articleTitle" class="my-0 mx-2 font-weight-bold text-center">文章標題</h3>
                             </div>
-
                             <button type="button" class="close" data-dismiss="modal" aria-label="browseClose"
                                     style="position: absolute !important; top: 0; right: 0; padding: 10px !important;">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                     </div>
-                    <div class="modal-body" style="border-top: 3px dotted grey;">
-                        <div class="row mx-auto mb-3 p-3 col-lg-10 col-12 justify-content-center div-style">
+                    <div class="modal-body ftco-animate">
+                        <div class="row mx-auto mb-3 p-3 col-lg-10 col-12 justify-content-center div-style" style="display: none">
                             <!-- 瀏覽文章內文區塊 -->
                             <div class="row m-0 px-3 col-12 ftco-animate" style="border-bottom: 1px solid lightgrey;">
                                 <div class="row col-6 mx-0 mb-2 p-0 font-weight-bold justify-content-start">
@@ -353,41 +351,36 @@
                                 <span id="conTent" class="col-12" contenteditable="false">文章內文</span>
                                 <span id="loginButton" class="mt-1 text-right" style="display: none;">
                                     <!-- 自訂屬性 articleId -->
-                                    <button id="editButton" articleId=""
-                                            class="btn btn-primary ftco-animate">編輯</button>
-                                    <button id="saveButton" articleId="" class="btn btn-primary ftco-animate"
-                                            style="display: none;">
-                                        保存
+                                    <button id="editButton" articleId="" class="btn btn-primary">編輯
                                     </button>
-                                    <button id="cancelButton" class="btn btn-primary btn-cancel ftco-animate"
-                                            style="display: none;">取消
+                                    <button id="saveButton" articleId="" class="btn btn-primary" style="display: none;">保存
                                     </button>
-                                    <button id="deleteButton" articleId=""
-                                            class="btn btn-primary btn-del ftco-animate">刪除</button>
+                                    <button id="cancelButton" class="btn btn-primary btn-cancel" style="display: none;">取消
+                                    </button>
+                                    <button id="deleteButton" articleId="" class="btn btn-primary btn-del">刪除
+                                    </button>
                                 </span>
                             </div>
                         </div>
                         <!-- 新增留言區塊 -->
-                        <div class="row mx-auto mb-3 col-lg-10 col-12 justify-content-center">
+                        <div class="row mx-auto mb-3 col-lg-10 col-12 justify-content-center ftco-animate" style="display: none">
                             <!-- 自訂屬性 articleId -->
-                            <textarea id="addMsgArea" articleId="" class="m-1 col-12 div-style ftco-animate"
+                            <textarea id="addMsgArea" articleId="" class="m-1 col-12 div-style"
                                       oninput="setTextAreaHeight(this);" style="display: none;"></textarea>
                             <span class="mt-1 text-right" style="display: block;">
-                                <button id="newMsgBtn" class="btn btn-primary mx-1 ftco-animate" onclick="newMsg()">我要留言
+                                <button id="newMsgBtn" class="btn btn-primary mx-1" onclick="newMsg()">我要留言
                                 </button>
-                                <button id="saveMsgBtn" class="btn btn-primary ftco-animate" onclick="saveMsg()"
-                                        style="display: none;">保存
+                                <button id="saveMsgBtn" class="btn btn-primary" onclick="saveMsg()" style="display: none;">保存
                                 </button>
-                                <button id="cancelMsgBtn" class="btn btn-primary btn-cancel ftco-animate" onclick="cancelMsg()"
-                                        style="display: none;">取消
-                            </button>
+                                <button id="cancelMsgBtn" class="btn btn-primary btn-cancel" onclick="cancelMsg()" style="display: none;">取消
+                                </button>
                             </span>
                         </div>
                         <div id="chatBlock" class="row m-auto col-lg-10 col-12 justify-content-center">
                             <!-- 文章留言區塊 -->
                         </div>
                     </div>
-                    <div class="modal-footer justify-content-center">
+                    <div class="modal-footer justify-content-center ftco-animate">
                         <!-- 點讚功能未實作先隱藏
                             <div class="p-1">
                                 <button id="likes" type="button" class="btn btn-primary">讚！</button>
@@ -411,8 +404,7 @@
                             <h3 class="modal-title font-weight-bold">發表文章</h3>
                         </div>
                     </div>
-                    <div class="modal-body"
-                         style="border-top: 3px dotted grey; border-bottom: 3px dotted grey;">
+                    <div class="modal-body" style="border-top: 3px dotted grey; border-bottom: 3px dotted grey;">
                         <div class="row m-auto mb-3 p-3 col-lg-10 col-12 justify-content-center div-style">
                             <!-- 文章分類及文章標題 -->
                             <div class="row m-0 p-1 col-12" style="border-bottom: 1px solid lightgrey;">
@@ -436,9 +428,9 @@
                             </div>
                             <!-- 文章內容 -->
                             <div class="m-0 p-0 col-12">
-                                <textarea id="postContent" oninput="setTextAreaHeight(this);"
-                                          class="px-4 col-12"
-                                          placeholder="&#10;※發文宣導※&#10;&#10;● 不違反善良風俗。&#10;● 禁止標題與內文不符。&#10;● 不要進行人身攻擊，小心無意間觸法。&#10;● 推廣正面發文風氣，從你我做起。"></textarea>
+                                <textarea id="postContent" oninput="setTextAreaHeight(this);" class="px-4 col-12"
+                                          placeholder="&#10;※發文宣導※&#10;&#10;● 不違反善良風俗。&#10;● 禁止標題與內文不符。&#10;● 不要進行人身攻擊，小心無意間觸法。&#10;● 推廣正面發文風氣，從你我做起。">
+                                </textarea>
                             </div>
                         </div>
                     </div>
@@ -626,6 +618,9 @@
             type: "GET",
             url: "/forumArticles/" + id,
             success: function (articleData) {
+                // 恢復彈出式視窗隱蔽的元素
+                $("#articleInfo > .modal-header").removeAttr("style");
+                $("#articleInfo > .modal-body > div").removeAttr("style");
                 // 清空文章標題
                 $("#articleType").empty();
                 $("#articleTitle").empty();
@@ -636,14 +631,12 @@
                 $("#chatBlock").empty();
                 // 清空留言區內容
                 $("#conTent").empty();
-
                 // 新增留言區-按鈕及可編輯處初始化
                 $("#addMsgArea").val("");
                 $("#addMsgArea").attr("style", "display: none;");
                 $("#newMsgBtn").attr("style", "display: inline;");
                 $("#saveMsgBtn").attr("style", "display: none;");
                 $("#cancelMsgBtn").attr("style", "display: none;");
-
 
                 // 加入文章內文
                 $("#articleType").text(articleData[0].type);
@@ -1068,6 +1061,11 @@
         textarea.style.height = (textarea.scrollHeight) + "px";
     }
 
+    // 彈出式互動視窗關閉時將元素隱蔽避免資料暫留
+    $("#browseModalCenter").on("hidden.bs.modal", function() {
+        $("#articleInfo > .modal-header").attr("style", "display: none");
+        $("#articleInfo > .modal-body > div").attr("style", "display: none");
+    });
 </script>
 
 </body>
